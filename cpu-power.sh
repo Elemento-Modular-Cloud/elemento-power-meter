@@ -1,4 +1,4 @@
-prevjoules=0
+prevjoules=0.0
 
 while :
 do
