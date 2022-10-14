@@ -17,8 +17,6 @@ if $IS_ECC; then
   CORRECTION=1.125
 fi
 
-echo $CORRECTION
-
 export ELEMENTO_POWER_RAM
 ELEMENTO_POWER_RAM=$(echo "$N_STICKS * ${RAM_POWER_DRAW[$RAM_TYPE]}" | bc)
 
