@@ -13,7 +13,11 @@ N_STICKS=$(echo "$DMI_RAM" | grep DDR* | wc -l)
 RAM_TYPE=$(echo "$DMI_RAM" | grep -o DDR[1-4] | tail -1)
 IS_ECC=$(dmidecode -t memory | grep -q "Error Correction Type: None")
 
-echo $IS_ECC
+if $IS_ECC; then
+  CORRECTION=1.125
+fi
+
+echo $CORRECTION
 
 export ELEMENTO_POWER_RAM
 ELEMENTO_POWER_RAM=$(echo "$N_STICKS * ${RAM_POWER_DRAW[$RAM_TYPE]}" | bc)
