@@ -1,5 +1,8 @@
 #! /bin/bash
 cmd="sensors -u | grep -A1 Esocket0: | tail -1 | grep -oP '(?<=\s)\d.+'"
+
+export ELEMENTO_POWER_CPU
+
 while :
 do
   prevjoules=$(eval $cmd)
