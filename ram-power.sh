@@ -11,7 +11,9 @@ CORRECTION=1.
 DMI_RAM=$(strace -f -e open dmidecode -t 17 2> /dev/null)
 N_STICKS=$(echo "$DMI_RAM" | grep DDR* | wc -l)
 RAM_TYPE=$(echo "$DMI_RAM" | grep -o DDR[1-4] | tail -1)
-IS_ECC=$(echo "$DMI_RAM" | grep 
+IS_ECC=$(dmidecode -t memory | grep -q "Error Correction Type: None")
+
+echo $IS_ECC
 
 export ELEMENTO_POWER_RAM
 ELEMENTO_POWER_RAM=$(echo "$N_STICKS * ${RAM_POWER_DRAW[$RAM_TYPE]}" | bc)
