@@ -5,6 +5,7 @@ while :
 do
   sleep .5s
   joules=$cmd
+  echo $joules
   echo $(echo "($joules - $prevjoules) / .5" | bc)
   prevjoules=$joules
 done
