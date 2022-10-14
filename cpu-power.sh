@@ -1,7 +1,5 @@
-CMD="sensors -u | grep -A1 Esocket0: | tail -1 | grep -oP '(?<=\s)\d.+'"
-
 while :
 do
-  joules=$($CMD)
+  joules=$(sensors -u | grep -A1 Esocket0: | tail -1 | grep -oP '(?<=\s)\d.+')
   echo $joules
 done
