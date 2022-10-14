@@ -1,4 +1,4 @@
-cmd="sensors -u | grep -A1 Esocket0: | tail -1 | grep -oP '(?<=\s)\d.+'"
+cmd=( sensors -u | grep -A1 Esocket0: | tail -1 | grep -oP '(?<=\s)\d.+' )
 prevjoules="${cmd[@]}"
 
 while :
