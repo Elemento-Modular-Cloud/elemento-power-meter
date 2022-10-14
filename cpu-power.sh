@@ -1,10 +1,10 @@
 CMD="sensors -u | grep -A1 Esocket0: | tail -1 | grep -oP '(?<=\s)\d.+'"
-prevjoules=$($CMD)
+prevjoules=$CMD
 
 while :
 do
   sleep .5s
-  joules=$($CMD)
+  joules=$CMD
   echo $(echo "($joules - $prevjoules) / .5" | bc)
   prevjoules=$joules
 done
