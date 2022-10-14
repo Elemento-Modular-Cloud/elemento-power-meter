@@ -4,6 +4,7 @@ do
   prevjoules=$(eval $cmd)
   sleep .5s
   joules=$(eval $cmd)
-  echo $(echo "($joules - $prevjoules) / .5" | bc)
+  export ELEMENTO_POWER_CPU=$(echo "($joules - $prevjoules) / .5" | bc)
+  echo $ELEMENTO_POWER_CPU
   prevjoules=$joules
 done
