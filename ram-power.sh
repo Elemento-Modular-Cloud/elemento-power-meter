@@ -8,7 +8,7 @@ RAM_POWER_DRAW["DDR4"]=3
 
 CORRECTION=1.
 
-DMI_RAM=$(strace -f -e open dmidecode -t memory 2> /dev/null)
+DMI_RAM=$(strace -f -e open dmidecode -t 17 2> /dev/null)
 N_STICKS=$(echo "$DMI_RAM" | grep DDR* | wc -l)
 RAM_TYPE=$(echo "$DMI_RAM" | grep -o DDR[1-4] | tail -1)
 IS_ECC=$(echo "$DMI_RAM" | grep 
