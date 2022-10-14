@@ -10,8 +10,8 @@ DMI_RAM=$(strace -f -e open dmidecode -t 17 2> /dev/null)
 
 echo $DMI_RAM
 
-N_STICKS=$(echo $DMI_RAM | grep DDR* | wc -l)
-RAM_TYPE=$(echo $DMI_RAM | grep -o DDR[1-4] | tail -1)
+N_STICKS=$(echo "$DMI_RAM" | grep DDR* | wc -l)
+RAM_TYPE=$(echo "$DMI_RAM" | grep -o DDR[1-4] | tail -1)
 
 echo $N_STICKS
 echo $RAM_TYPE
