@@ -11,7 +11,7 @@ N_STICKS=$(echo $DMI_RAM | grep DDR* | wc -l)
 RAM_TYPE=$(echo $DMI_RAM | grep -o DDR[1-4] | tail -1)
 
 export ELEMENTO_POWER_RAM
-ELEMENTO_POWER_RAM=(echo "$N_STICKS * $RAM_POWER_DRAW[$RAM_TYPE]" | bc)
+ELEMENTO_POWER_RAM=$(echo "$N_STICKS * $RAM_POWER_DRAW[$RAM_TYPE]" | bc)
 
 echo $ELEMENTO_POWER_RAM
 
