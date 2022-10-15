@@ -5,8 +5,6 @@ NVME_POWER_DRAW=(25 18 18 15 10 8 5)
 export ELEMENTO_POWER_NVME=0
 NVME_DEVICES=$(nvme list | tail -n +3 | awk '{print $1}')
 
-echo $NVME_DEVICES
-
 while IFS= read -r dev; do
     if [[ ! -z "$dev" ]]
     then
