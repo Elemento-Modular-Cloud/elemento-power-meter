@@ -2,7 +2,7 @@
 
 export ELEMENTO_POWER_TOTAL
 
-cpu=$(bash ./cpu-power.sh)
+cpu=$(bash ./cpu-rapl-power.sh)
 ram=$(bash ./ram-power.sh)
 nvme=$(bash ./nvme-power.sh)
 ELEMENTO_POWER_TOTAL=$(echo "$cpu + $ram + $nvme" | bc)
