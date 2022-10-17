@@ -14,11 +14,12 @@ RAM_TYPE=$(echo "$DMI_RAM" | grep -o DDR[1-4] | tail -1)
 IS_ECC=$(dmidecode -t memory | grep -q "Error Correction Type: None")
 
 if $IS_ECC; then
+  echo "Is ECC"
   CORRECTION=1.125
 fi
 
 export ELEMENTO_POWER_RAM
-ELEMENTO_POWER_RAM=$(echo "$N_STICKS * ${RAM_POWER_DRAW[$RAM_TYPE]}" | bc)
+ELEMENTO_POWER_RAM=$(echo "$N_STICKS * ${RAM_POWER_DRAW[$RAM_TYPE]} * $CORRECTION" | bc)
 
 echo $ELEMENTO_POWER_RAM
 
