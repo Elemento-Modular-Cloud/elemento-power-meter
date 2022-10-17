@@ -14,7 +14,6 @@ RAM_TYPE=$(echo "$DMI_RAM" | grep -o DDR[1-4] | tail -1)
 IS_ECC=$(dmidecode -t memory | grep -q "Error Correction Type: None")
 
 if $IS_ECC; then
-  echo "Is ECC"
   CORRECTION=1.125
 fi
 
