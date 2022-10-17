@@ -40,15 +40,13 @@ See [the implementation here](./cpu-rapl-power.sh).
 RAM power consumption is not depending on the RAM load, but rather on the techology.
 As a reference, here are the typical consumptions for RAM modules on different DDR versions:
 
-<center>
 | **Type** | **Voltage** | **Power draw** |
-|----------|-------------|----------------|
+|:--------:|:-----------:|:--------------:|
 | DDR1     | 2.5V        | 5.5W           |
 | DDR2     | 1.8V        | 4.5W           |
 | DDR3     | 1.5V        | 3W             |
 | DDR4     | 1.2V        | 3W             |
 | DDR5     | 1.1V        | 2.4W           |
-</center>
 
 (from [link](https://www.buildcomputers.net/power-consumption-of-pc-components.html))
 
@@ -63,9 +61,8 @@ See [the implementation here](./ram-power.sh).
 NVMe power consuption is mainly dependant on the NVMe device power state.
 According to [the NVMexpress consortium](https://nvmexpress.org/resources/nvm-express-technology-features/nvme-technology-power-features/) the reference rating for different power states are:
 
-<center>
 | **Power state** | **Max power draw** |
-|-----------------|--------------------|
+|:---------------:|:------------------:|
 | 0               | 25W                |
 | 1               | 18W                |
 | 2               | 18W                |
@@ -73,7 +70,6 @@ According to [the NVMexpress consortium](https://nvmexpress.org/resources/nvm-ex
 | 4               | 10W                |
 | 5               | 8W                 |
 | 6               | 5W                 |
-</center>
 
 The enumeration of NVMe devices is obtained using the `nvme` command line utility.
 The detection of the power state a device is in can be done using the same utility via `nvme get-feature <device_path_or_id> -f 2`.
