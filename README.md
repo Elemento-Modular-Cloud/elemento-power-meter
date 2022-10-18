@@ -57,6 +57,8 @@ The RAM power draw is fixed and is not changing in time in our approach.
 We use a mix of `strace` and `dmidecode` routines to detect the number of RAM sticks and the presence of ECC technologies.
 See [the implementation here](./ram-power.sh).
 
+The value is not updating and is therefore a fixed value depending on hardware configuration and not on runtime information.
+
 ## NVMe power
 NVMe power consuption is mainly dependant on the NVMe device power state.
 According to [the NVMexpress consortium](https://nvmexpress.org/resources/nvm-express-technology-features/nvme-technology-power-features/) the reference rating for different power states are:
@@ -74,4 +76,20 @@ According to [the NVMexpress consortium](https://nvmexpress.org/resources/nvm-ex
 The enumeration of NVMe devices is obtained using the `nvme` command line utility.
 The detection of the power state a device is in can be done using the same utility via `nvme get-feature <device_path_or_id> -f 2`.
 
-The power state can cahnge over time, therefore this module must be considered time-variable.
+The power state can change over time, therefore this module must be considered time-variable.
+
+## Storage power (SATA/SAS)
+Our initial approach on this point is to just differentiate on wether the device is an SSD or a spinning disk (and the RPMs in case of the latter).
+An upgrade is related to check disk activity, but for the moment we decided to just keep the upper limit of power consumption.
+
+Data have been obtained from varoius sources. The following table reports the adopted standard values:
+| **Drive type**  | **Max power draw** |
+|:---------------:|:------------------:|
+| SSD             | 4.2W               |
+| 15k RPM HDD     | 6.5W               |
+| 10k RPM HDD     | 5.8W               |
+| 7.2k RPM HDD    | 8W                 |
+
+Devices enumeration is done using `lsscsi`, while the rated RPM/solid stateness is obtained looking into `hdparm`.
+
+The value is not updating and is therefore a fixed value depending on hardware configuration and not on runtime information.
