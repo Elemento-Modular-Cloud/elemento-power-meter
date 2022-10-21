@@ -73,8 +73,25 @@ According to [the NVMexpress consortium](https://nvmexpress.org/resources/nvm-ex
 | 5               | 8W                 |
 | 6               | 5W                 |
 
+However, the `smartctl` command is able to return the specific ratings for an nvme device.
+I can be used via `smartctl -a /dev/nvmeXX` under the header "`Supported Power States`".
+For example:
+
+```
+Supported Power States
+St Op     Max   Active     Idle   RL RT WL WT  Ent_Lat  Ex_Lat
+ 0 +     8.25W    8.25W       -    0  0  0  0        0       0
+ 1 +     3.50W    3.50W       -    0  0  0  0        0       0
+ 2 +     2.60W    2.60W       -    0  0  0  0        0       0
+ 3 -   0.0250W       -        -    3  3  3  3     5000   10000
+ 4 -   0.0050W       -        -    4  4  4  4     3900   45700
+```
+
+Such information in parsed and used in the consumption computation.
+
 The enumeration of NVMe devices is obtained using the `nvme` command line utility.
-The detection of the power state a device is in can be done using the same utility via `nvme get-feature <device_path_or_id> -f 2`.
+The detection of the power state a device is in can be done using the same utility via `nvme get-feature <device_path_or_id> -f 2 -H`.
+A load hint can be obtained and (maybe) can be used to further refine the estimate.
 
 The power state can change over time, therefore this module must be considered time-variable.
 
