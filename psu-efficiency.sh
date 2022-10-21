@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo .90
+echo 0.9
