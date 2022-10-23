@@ -16,7 +16,7 @@ EFFCURVES[Titanium]="-0.0405 2.90 52.190"
 echo $EFFICIENCY
 echo ${EFFCURVES[$EFFICIENCY]}
 
-readarray -td, a <<<"${EFFCURVES[$EFFICIENCY]}"; declare -p P;
+readarray -td, P <<<"${EFFCURVES[$EFFICIENCY]}"; declare -p P;
 
 echo $P
 
