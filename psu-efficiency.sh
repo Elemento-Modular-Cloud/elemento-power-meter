@@ -16,5 +16,5 @@ EFFCURVES[Titanium]="-0.0405, 2.90, 52.190"
 
 readarray -td, P <<<"${EFFCURVES[$EFFICIENCY]}"; declare -p P;
 
-ELEMENTO_PSU_EFFICIENCY=$(echo "(${P[0]} * $LOAD_PC * $LOAD_PC + ${P[1]} * $LOAD_PC + ${P[2]}) / 100" | bc)
+ELEMENTO_PSU_EFFICIENCY=$(echo "${P[0]} * $LOAD_PC * $LOAD_PC + ${P[1]} * $LOAD_PC + ${P[2]}" | bc)
 echo $ELEMENTO_PSU_EFFICIENCY
