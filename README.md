@@ -110,3 +110,33 @@ Data have been obtained from varoius sources. The following table reports the ad
 Devices enumeration is done using `lsscsi`, while the rated RPM/solid stateness is obtained looking into `hdparm`.
 
 The value is not updating and is therefore a fixed value depending on hardware configuration and not on runtime information.
+
+
+## PSU efficiency
+Our approach is based on getting the power draw from the above methods and then using the 80Plus curves to get the load-dependent PSU efficiency.
+80Plus has some well defined values for the PSU efficiencies at different loads.
+In particular, the rating involves three points: 20%, 50% and 100% loads.
+
+| **Rating**         | **20%** | **50%** | **100%** |
+|:------------------:|:-------:|:-------:|:--------:|
+| 80Plus             | 80%     | 80%     | 80%      |
+| 80Plus Bronze      | 82%     | 85%     | 82%      |
+| 80Plus Silver      | 85%     | 88%     | 85%      |
+| 80Plus Gold        | 87%     | 90%     | 87%      |
+| 80Plus Platinum    | 90%     | 92%     | 89%      |
+| 80Plus Titanium    | 92%     | 94%     | 90%      |
+
+We used the Kramer method to fit three points to a parabola to obtain a function of the load (defined as current poser draw divided by the maximum PSU power output).
+
+| **Rating**         | **formual** |
+|:------------------:|:-----------:|
+| 80Plus             | `80`         |
+| 80Plus Bronze      | `-0.0354x^2+2.58x+44.571`         |
+| 80Plus Silver      | `-0.0367x^2+2.67x+46.286`         |
+| 80Plus Gold        | `-0.0376x^2+2.73x+47.429`         |
+| 80Plus Platinum    | `-0.0389x^2+2.79x+49.762`         |
+| 80Plus Titanium    | `-0.0405x^2+2.90x+52.190`         |
+
+where `x` in the load.
+
+This value is used as a rescaling factor to obtain the actual wall power draw from the measured power consumption.
