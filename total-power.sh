@@ -2,12 +2,15 @@
 
 export ELEMENTO_POWER_TOTAL
 
+PSU_MAX_LOAD=${1:-"850"}
+PSU_EFF_RATING=${2:-"Platinum"}
+
 cpu=$(bash ./cpu-rapl-power.sh)
 ram=$(bash ./ram-power.sh)
 nvme=$(bash ./nvme-power.sh)
 storage=$(bash ./storage-power.sh)
 ELEMENTO_POWER_TOTAL=$(echo "$cpu + $ram + $nvme + $storage" | bc)
-efficiency=$(bash ./psu-efficiency.sh)
+efficiency=$(bash ./psu-efficiency.sh $ELEMENTO_POWER_TOTAL $PSU_MAX_LOAD $PSU_EFF_RATING)
 ELEMENTO_POWER_WALL=$(echo "$ELEMENTO_POWER_TOTAL" / "$efficiency" | bc)
 
 echo "--------------------------------------"
