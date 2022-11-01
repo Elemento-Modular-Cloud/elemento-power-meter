@@ -12,7 +12,23 @@ STORAGE_DEVICES=$(lsscsi -t | grep -i "sata" | awk '{print $NF}')
 while IFS= read -r dev; do
     if [[ ! -z "$dev" ]]; then
         type=$(hdparm -I $dev | grep -e "Nominal Media Rotation Rate:" | cut -d":" -f2 | tr -d ' ')
-        ELEMENTO_POWER_STORAGE=$(echo "$ELEMENTO_POWER_STORAGE + ${STORAGE_POWER_DRAW[$type]}" | bc)
+        state=$(hdparm -C $dev | grep -e "drive state is:" | cut -d ":" -f2 | tr -d ' ')
+        modifier=1.
+        case $state in
+            "unknown")
+                modifier=.5
+                ;;
+            "active/idle")
+                modifier=1.
+                ;;
+            "standby")
+                modifier=.2
+                ;;
+            "sleeping")
+                modifier=.1
+                ;;
+        esac
+        ELEMENTO_POWER_STORAGE=$(echo "$ELEMENTO_POWER_STORAGE + ${STORAGE_POWER_DRAW[$type] * $modifier}" | bc)
     fi
 done <<< "$STORAGE_DEVICES"
 
