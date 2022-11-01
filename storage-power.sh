@@ -10,7 +10,8 @@ isActive() {
 }
 
 activityModifier() {
-    if [ $(isActive $1) != "" ]; then
+    active=$(isActive $1)
+    if [ $active != "" ]; then
         echo 1.
     fi
     echo 0.2
