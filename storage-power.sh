@@ -45,7 +45,9 @@ while IFS= read -r dev; do
                 modifier=.1
                 ;;
         esac
-        ELEMENTO_POWER_STORAGE=$(echo "$ELEMENTO_POWER_STORAGE + ${STORAGE_POWER_DRAW[$type]} * $modifier" | bc)
+        devicepower=$(echo "${STORAGE_POWER_DRAW[$type]} * $modifier" | bc)
+        echo $devicepower 1>&2
+        ELEMENTO_POWER_STORAGE=$(echo "$ELEMENTO_POWER_STORAGE + $devicepower" | bc)
     fi
 done <<< "$STORAGE_DEVICES"
 
