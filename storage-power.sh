@@ -2,19 +2,18 @@
 
 isActive() {
     device=$(echo "$1" | cut -d "/" -f3)
-    cmd='cat /proc/diskstats | grep "$device" | xargs'
+    cmd='cat /proc/diskstats | grep "$device"'
     stats0=$(eval $cmd)
     sleep .1s
     stats1=$(eval $cmd)
-    DIFF=$(diff $stats0 $stats1)
-    return [ "$DIFF" != "" ]
+    echo $(diff $stats0 $stats1)
 }
 
 activityModifier() {
-    if isActive $1; then
-        return "1."
+    if [ isActive $1 != "" ]; then
+        echo 1.
     fi
-    return "0.2"
+    echo 0.2
 }
 
 declare -a STORAGE_POWER_DRAW
@@ -30,7 +29,7 @@ while IFS= read -r dev; do
     if [[ ! -z "$dev" ]]; then
         type=$(hdparm -I $dev | grep -e "Nominal Media Rotation Rate:" | cut -d":" -f2 | tr -d ' ')
         state=$(hdparm -C $dev | grep -e "drive state is:" | cut -d ":" -f2 | tr -d ' ')
-        modifier="1."
+        modifier=1.
         case $state in
             "unknown")
                 modifier=$(activityModifier $dev)
@@ -39,10 +38,10 @@ while IFS= read -r dev; do
                 modifier=$(activityModifier $dev)
                 ;;
             "standby")
-                modifier=".2"
+                modifier=.2
                 ;;
             "sleeping")
-                modifier=".1"
+                modifier=.1
                 ;;
         esac
         ELEMENTO_POWER_STORAGE=$(echo "$ELEMENTO_POWER_STORAGE + ${STORAGE_POWER_DRAW[$type]} * $modifier" | bc)
