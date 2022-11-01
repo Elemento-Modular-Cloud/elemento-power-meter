@@ -6,7 +6,7 @@ isActive() {
     stats0=$(eval $cmd)
     sleep .1s
     stats1=$(eval $cmd)
-    echo $(diff $stats0 $stats1)
+    echo $(diff  <(echo "$stats0" ) <(echo "$stats1"))
 }
 
 activityModifier() {
