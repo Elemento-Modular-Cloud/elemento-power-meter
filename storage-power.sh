@@ -7,14 +7,17 @@ isActive() {
     sleep .1s
     stats1=$(eval $cmd)
     echo $(diff  <(echo "$stats0" ) <(echo "$stats1"))
+    return 0
 }
 
 activityModifier() {
     active=$(isActive $1)
     if [ "$active" != "" ]; then
         echo 1.
+        return 0
     fi
     echo 0.2
+    return 0
 }
 
 declare -a STORAGE_POWER_DRAW
@@ -46,7 +49,6 @@ while IFS= read -r dev; do
                 ;;
         esac
         devicepower=$(echo "${STORAGE_POWER_DRAW[$type]} * $modifier" | bc)
-        echo $devicepower 1>&2
         ELEMENTO_POWER_STORAGE=$(echo "$ELEMENTO_POWER_STORAGE + $devicepower" | bc)
     fi
 done <<< "$STORAGE_DEVICES"
