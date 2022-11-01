@@ -33,10 +33,10 @@ while IFS= read -r dev; do
         modifier=1.
         case $state in
             "unknown")
-                modifier=activityModifier($dev)
+                modifier=$(activityModifier $dev)
                 ;;
             "active/idle")
-                modifier=activityModifier($dev)
+                modifier=$(activityModifier $dev)
                 ;;
             "standby")
                 modifier=.2
