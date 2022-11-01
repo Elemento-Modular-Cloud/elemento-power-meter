@@ -14,7 +14,7 @@ activityModifier() {
     if isActive $1; then
         return 1.
     fi
-    return .2
+    return 0.2
 }
 
 declare -a STORAGE_POWER_DRAW
