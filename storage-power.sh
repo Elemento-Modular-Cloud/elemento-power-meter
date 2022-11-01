@@ -1,5 +1,22 @@
 #!/bin/bash
 
+isActive(devpath) {
+    device=$(echo "$devpath" | cut -d "/" -f3)
+    cmd='cat /proc/diskstats | grep "$device" | xargs'
+    stats0=$(eval $cmd)
+    sleep .1s
+    stats1=$(eval $cmd)
+    DIFF=$(diff $stats0 $stats1)
+    return [ "$DIFF" != "" ]
+}
+
+activityModifier(devpath) {
+    if [ isActive($dev) ]; then
+        return 1.
+    fi
+    return .2
+}
+
 declare -a STORAGE_POWER_DRAW
 STORAGE_POWER_DRAW["SolidStateDevice"]=4.2
 STORAGE_POWER_DRAW["15000"]=6.5
@@ -16,10 +33,10 @@ while IFS= read -r dev; do
         modifier=1.
         case $state in
             "unknown")
-                modifier=.5
+                modifier=activityModifier($dev)
                 ;;
             "active/idle")
-                modifier=1.
+                modifier=activityModifier($dev)
                 ;;
             "standby")
                 modifier=.2
