@@ -1,7 +1,7 @@
 #!/bin/bash
 
-isActive(devpath) {
-    device=$(echo "$devpath" | cut -d "/" -f3)
+isActive() {
+    device=$(echo "$1" | cut -d "/" -f3)
     cmd='cat /proc/diskstats | grep "$device" | xargs'
     stats0=$(eval $cmd)
     sleep .1s
@@ -10,8 +10,8 @@ isActive(devpath) {
     return [ "$DIFF" != "" ]
 }
 
-activityModifier(devpath) {
-    if [ isActive($dev) ]; then
+activityModifier() {
+    if [ isActive($1) ]; then
         return 1.
     fi
     return .2
