@@ -11,7 +11,7 @@ isActive() {
 
 activityModifier() {
     active=$(isActive $1)
-    if [ $active != "" ]; then
+    if [ "$active" != "" ]; then
         echo 1.
     fi
     echo 0.2
