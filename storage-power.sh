@@ -11,7 +11,7 @@ isActive() {
 }
 
 activityModifier() {
-    if [ isActive($1) ]; then
+    if isActive $1; then
         return 1.
     fi
     return .2
