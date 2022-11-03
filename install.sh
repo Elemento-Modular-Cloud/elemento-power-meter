@@ -1,3 +1,3 @@
 #!/bin/bash
 
-yum install -y nvme-cli strace hdparm bc smartctl
+yum install -y nvme-cli strace hdparm bc smartmontools
