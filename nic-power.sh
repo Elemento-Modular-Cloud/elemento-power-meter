@@ -1,4 +1,4 @@
-#!/bin.bash
+#!/bin/bash
 
 NICS=$(ls /sys/class/net | grep "en[op]*\|eth*")
 
