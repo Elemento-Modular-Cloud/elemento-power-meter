@@ -1,3 +1,3 @@
 #!/bin/bash
 
-yum install -y nvme-cli strace hdparm
+yum install -y nvme-cli strace hdparm bc
