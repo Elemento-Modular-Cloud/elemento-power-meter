@@ -19,7 +19,7 @@ readarray -td, P <<<"${EFFCURVES[$EFFICIENCY]}"
 
 ELEMENTO_PSU_EFFICIENCY=`bc -l <<< "${P[0]} * $LOAD_PC * $LOAD_PC + ${P[1]} * $LOAD_PC + ${P[2]}"`
 
-if [[ $ELEMENTO_PSU_EFFICIENCY -le 80 ]] then
+if (( $(echo "$ELEMENTO_PSU_EFFICIENCY <= 80" |bc -l) )) then
     ELEMENTO_PSU_EFFICIENCY=80
 fi
 
