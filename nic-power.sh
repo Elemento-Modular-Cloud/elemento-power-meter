@@ -36,7 +36,7 @@ while IFS= read -r nic; do
     fi
 
     nic_power=`bc -l <<< "$speed / 1000 / $gbps_per_watt * $medium_correction"`
-    ELEMENTO_POWER_NICS=`bc -l <<< "scale 3; $ELEMENTO_POWER_NICS + $nic_power"`
+    ELEMENTO_POWER_NICS=`bc -l <<< "scale=4; $ELEMENTO_POWER_NICS + $nic_power"`
 
 done <<< "$NICS"
 
