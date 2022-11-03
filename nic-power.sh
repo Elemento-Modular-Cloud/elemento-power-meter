@@ -2,14 +2,24 @@
 
 NICS=$(ls /sys/class/net | grep "en[op]*\|eth*")
 
+echo $NICS
+
 export ELEMENTO_POWER_NICS=0
 
 while IFS= read -r nic; do
+
+    echo $nic
+
     info=$(ethtool $nic)
-    speed=$(echo $info | grep "Speed: " | cut -d ":" -f2 | tr -d ' ' | grep -Eo [0-9]+)
-    transciever=$(echo $info | grep "Transceiver: " | cut -d ":" -f2 | tr -d ' ')
-    port=$(echo $info | grep "Port: " | cut -d ":" -f2 | tr -d ' ')
-    
+
+    speed=$(echo "$info" | grep "Speed: " | cut -d ":" -f2 | tr -d ' ' | grep -Eo [0-9]+)
+    transciever=$(echo "$info" | grep "Transceiver: " | cut -d ":" -f2 | tr -d ' ')
+    port=$(echo "$info" | grep "Port: " | cut -d ":" -f2 | tr -d ' ')
+
+    if [[ -z "$speed" ]]; then
+        break
+    fi
+
     gbps_per_watt=0.
     if [[ $speed -eq 100 ]]; then
         gbps_per_watt=.1
@@ -21,6 +31,8 @@ while IFS= read -r nic; do
         gbps_per_watt=.9
     fi
 
+    echo $gbps_per_watt
+
     medium_correction=1.
     if [[ $port -eq "TwistedPair" ]]; then
         medium_correction=1.
@@ -30,7 +42,8 @@ while IFS= read -r nic; do
         medium_correction=2.
     fi
 
-    ELEMENTO_POWER_NICS=`bc -l <<< "$ELEMENTO_POWER_NICS + $speed * $gbps_per_watt * $medium_correction"`
+    nic_power=`bc -l <<< "$speed / 1000 * $gbps_per_watt * $medium_correction"`
+    ELEMENTO_POWER_NICS=`bc -l <<< "$ELEMENTO_POWER_NICS + $nic_power"`
 
 done <<< "$NICS"
 
