@@ -5,14 +5,15 @@ MAX_LOAD=${2:-"1600"}
 
 LOAD_PC=`bc -l <<< "$LOAD / $MAX_LOAD * 100"`
 EFFICIENCY=${3:-"Gold"}
+EFFICIENCY=$(echo "$EFFICIENCY" | tr '[:upper:]' '[:lower:]')
 
 declare -A EFFCURVES
-EFFCURVES[Base]="0, 0, 80"
-EFFCURVES[Bronze]="-0.0354, 2.58, 44.571"
-EFFCURVES[Silver]="-0.0367, 2.67, 46.286"
-EFFCURVES[Gold]="-0.0376, 2.73, 47.429"
-EFFCURVES[Platinum]="-0.0389, 2.79, 49.762"
-EFFCURVES[Titanium]="-0.0405, 2.90, 52.190"
+EFFCURVES[base]="0, 0, 80"
+EFFCURVES[bronze]="-0.0354, 2.58, 44.571"
+EFFCURVES[silver]="-0.0367, 2.67, 46.286"
+EFFCURVES[gold]="-0.0376, 2.73, 47.429"
+EFFCURVES[platinum]="-0.0389, 2.79, 49.762"
+EFFCURVES[titanium]="-0.0405, 2.90, 52.190"
 
 readarray -td, P <<<"${EFFCURVES[$EFFICIENCY]}"
 
