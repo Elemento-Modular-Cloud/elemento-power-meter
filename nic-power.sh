@@ -6,6 +6,7 @@ export ELEMENTO_POWER_NICS=0
 
 while IFS= read -r nic; do
 
+    info=$(ethtool $nic)
     speed=$(echo "$info" | grep "Speed: " | cut -d ":" -f2 | tr -d ' ' | grep -Eo [0-9]+)
     transciever=$(echo "$info" | grep "Transceiver: " | cut -d ":" -f2 | tr -d ' ')
     port=$(echo "$info" | grep "Port: " | cut -d ":" -f2 | tr -d ' ')
