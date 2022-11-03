@@ -18,5 +18,12 @@ EFFCURVES[titanium]="-0.0405, 2.90, 52.190"
 readarray -td, P <<<"${EFFCURVES[$EFFICIENCY]}"
 
 ELEMENTO_PSU_EFFICIENCY=`bc -l <<< "${P[0]} * $LOAD_PC * $LOAD_PC + ${P[1]} * $LOAD_PC + ${P[2]}"`
+
+if [[ $ELEMENTO_PSU_EFFICIENCY -le 80]]; then
+    ELEMENTO_PSU_EFFICIENCY=80
+fi
+
+
 ELEMENTO_PSU_EFFICIENCY=`bc -l <<< "scale=4; $ELEMENTO_PSU_EFFICIENCY / 100"`
+
 echo $ELEMENTO_PSU_EFFICIENCY
