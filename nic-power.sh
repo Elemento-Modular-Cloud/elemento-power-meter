@@ -11,11 +11,11 @@ while IFS= read -r nic; do
     port=$(echo $info | grep "Port: " | cut -d ":" -f2 | tr -d ' ')
     
     gbps_per_watt=0.
-    if [[ $speed -eq "100Mb/s" ]]; then
+    if [[ $speed -eq 100 ]]; then
         gbps_per_watt=.1
-    elif [[ $speed -eq "1000Mb/s" ]]; then
+    elif [[ $speed -eq 1000 ]]; then
         gbps_per_watt=.45
-    elif [[ $speed -eq "10000Mb/s" ]]; then
+    elif [[ $speed -eq 10000 ]]; then
         gbps_per_watt=.8
     else
         gbps_per_watt=.9
