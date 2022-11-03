@@ -2,15 +2,9 @@
 
 NICS=$(ls /sys/class/net | grep "en[op]*\|eth*")
 
-echo $NICS
-
 export ELEMENTO_POWER_NICS=0
 
 while IFS= read -r nic; do
-
-    echo $nic
-
-    info=$(ethtool $nic)
 
     speed=$(echo "$info" | grep "Speed: " | cut -d ":" -f2 | tr -d ' ' | grep -Eo [0-9]+)
     transciever=$(echo "$info" | grep "Transceiver: " | cut -d ":" -f2 | tr -d ' ')
@@ -30,8 +24,6 @@ while IFS= read -r nic; do
     else
         gbps_per_watt=.9
     fi
-
-    echo $gbps_per_watt
 
     medium_correction=1.
     if [[ $port -eq "TwistedPair" ]]; then
