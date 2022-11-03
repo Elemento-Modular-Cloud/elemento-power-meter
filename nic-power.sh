@@ -17,7 +17,7 @@ while IFS= read -r nic; do
     port=$(echo "$info" | grep "Port: " | cut -d ":" -f2 | tr -d ' ')
 
     if [[ -z "$speed" ]]; then
-        break
+        continue
     fi
 
     gbps_per_watt=0.
