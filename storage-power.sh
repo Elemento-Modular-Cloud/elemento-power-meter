@@ -39,7 +39,7 @@ while IFS= read -r dev; do
         else
             type="SolidStateDevice"
         fi
-        if [[ $(isActive $1) == "active" ]]; then
+        if [[ $(isActive $dev) == "active" ]]; then
             state="ACTIVE or IDLE"
         else
             state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
