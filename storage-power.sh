@@ -32,7 +32,7 @@ STORAGE_DEVICES=$(lsscsi -t | grep -i "sata" | awk '{print $NF}')
 while IFS= read -r dev; do
     if [[ ! -z "$dev" ]]; then
         #type=$(hdparm -I $dev | grep -e "Nominal Media Rotation Rate:" | cut -d ":" -f2 | tr -d ' ')
-        dev_name=$(echo $dev | cut -d "/" -f2)
+        dev_name=$(echo $dev | cut -d "/" -f3)
         is_rotational=$(cat /sys/block/$dev_name/queue/rotational)
         if is_rotational; then
             type="7200rpm"
