@@ -44,8 +44,7 @@ while IFS= read -r dev; do
         if [ $(isActive $dev_name) ]; then
             state="ACTIVE or IDLE"
         else
-            #state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
-            state="STANDBY"
+            state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
         fi
         modifier=1.
         case $state in
