@@ -16,7 +16,7 @@ isActive() {
 }
 
 activityModifier() {
-    if (( isActive $1 )); then
+    if [ $(isActive $1) ]; then
         echo 1.
         return 0
     fi
@@ -42,7 +42,7 @@ while IFS= read -r dev; do
         else
             type="SolidStateDevice"
         fi
-        if (( isActive $dev_name )); then
+        if [ $(isActive $dev_name) ]; then
             state="ACTIVE or IDLE"
         else
             #state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
