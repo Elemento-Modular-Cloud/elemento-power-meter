@@ -38,8 +38,11 @@ while IFS= read -r dev; do
         else
             type="SolidStateDevice"
         fi
-        state=$(bash -c "smartctl -i --n standby --n sleep -n idle /dev/sda 2>&1 1>&1" | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
-        # state="unknown"
+        if [ "$active" != "" ]; then
+            state="ACTIVE or IDLE"
+        else
+            state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
+        fi
         modifier=1.
         case $state in
             "ACTIVE or IDLE"|"IDLE_A"|"IDLE_B")
