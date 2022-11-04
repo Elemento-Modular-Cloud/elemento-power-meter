@@ -6,13 +6,17 @@ isActive() {
     stats0=$(eval $cmd)
     sleep .1s
     stats1=$(eval $cmd)
-    echo $(diff  <(echo "$stats0" ) <(echo "$stats1"))
+    case "$stats0" in
+        $stats1 )
+            return false;;
+        *)
+            return true;;
+    esac
     return 0
 }
 
 activityModifier() {
-    active=$(isActive $1)
-    if [ "$active" != "" ]; then
+    if (( isActive $1 )); then
         echo 1.
         return 0
     fi
@@ -38,8 +42,7 @@ while IFS= read -r dev; do
         else
             type="SolidStateDevice"
         fi
-        is_active=$(isActive $dev)
-        if [ "$is_active" != "" ]; then
+        if (( isActive $dev_name )); then
             state="ACTIVE or IDLE"
         else
             #state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
