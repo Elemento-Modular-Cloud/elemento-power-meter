@@ -34,7 +34,7 @@ while IFS= read -r dev; do
         #type=$(hdparm -I $dev | grep -e "Nominal Media Rotation Rate:" | cut -d ":" -f2 | tr -d ' ')
         dev_name=$(echo $dev | cut -d "/" -f3)
         is_rotational=$(cat /sys/block/$dev_name/queue/rotational)
-        if is_rotational; then
+        if "$is_rotational"; then
             type="7200rpm"
         else
             type="SolidStateDevice"
