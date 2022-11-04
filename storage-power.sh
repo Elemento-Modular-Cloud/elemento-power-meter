@@ -8,9 +8,9 @@ isActive() {
     stats1=$(eval $cmd)
     case "$stats0" in
         $stats1 )
-            return false;;
+            return 0;;
         *)
-            return true;;
+            return 1;;
     esac
     return 0
 }
