@@ -2,10 +2,9 @@
 
 isActive() {
     device=$(echo "$1" | cut -d "/" -f3)
-    cmd='cat /sys/block/$device/stat'
-    stats0=$(eval $cmd)
+    stats0=$(</sys/block/$device/stat)
     sleep .1s
-    stats1=$(eval $cmd)
+    stats1=$(</sys/block/$device/stat)
     case "$stats0" in
         $stats1 )
             return 0;;
