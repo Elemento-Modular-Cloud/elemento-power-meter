@@ -15,13 +15,13 @@ efficiency=$(bash ./psu-efficiency.sh $ELEMENTO_POWER_TOTAL $PSU_MAX_LOAD $PSU_E
 ELEMENTO_POWER_WALL=$(echo "$ELEMENTO_POWER_TOTAL" / "$efficiency" | bc)
 
 echo "--------------------------------------"
-printf "CPU draw [W]: %.1f\n" $cpu
-printf "RAM draw [W]: %.1f\n" $ram
-printf "NVMe draw [W]: %.1f\n" $nvme
-printf "SATA/SAS draw [W]: %.1f\n" $storage
-printf "NIC draw [W]: %.1f\n" $nics
-printf "PSU efficiency [%%]: %.3f\n" $efficiency
+printf "CPU draw [W]: %.1f (ε=1\%)\n" $cpu
+printf "RAM draw [W]: %.1f (ε=10\%)\n" $ram
+printf "NVMe draw [W]: %.1f (ε=10\%)\n" $nvme
+printf "SATA/SAS draw [W]: %.1f (ε=15\%)\n" $storage
+printf "NIC draw [W]: %.1f (ε=15\%)\n" $nics
+printf "PSU efficiency [%%]: %.3f (ε=2\%)\n" $efficiency
 echo "--------------------------------------"
-printf "System consumption [W]:  %.1f\n" $ELEMENTO_POWER_TOTAL
-printf "System wall draw [W]:  %.1f\n" $ELEMENTO_POWER_WALL
+printf "System consumption [W]:  %.1f (ε=10\%)\n" $ELEMENTO_POWER_TOTAL
+printf "System wall draw [W]:  %.1f (ε=12\%)\n" $ELEMENTO_POWER_WALL
 echo "--------------------------------------"
