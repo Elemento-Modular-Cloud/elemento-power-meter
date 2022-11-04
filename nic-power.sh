@@ -9,7 +9,7 @@ while IFS= read -r nic; do
     info=$(ethtool $nic)
     speed=$(echo "$info" | grep "Speed: " | cut -d ":" -f2 | tr -d ' ' | grep -Eo [0-9]+)
     transciever=$(echo "$info" | grep "Transceiver: " | cut -d ":" -f2 | tr -d ' ')
-    port=$(echo "$info" | grep "Port: " | cut -d ":" -f2 | tr -d ' ')
+    medium=$(echo "$info" | grep "Port: " | cut -d ":" -f2 | tr -d ' ')
 
     if [[ -z "$speed" ]]; then
         continue
@@ -27,15 +27,15 @@ while IFS= read -r nic; do
     fi
 
     medium_correction=1.
-    if [[ $port -eq "TwistedPair" ]]; then
+    if [[ $medium -eq "TwistedPair" ]]; then
         medium_correction=1.
-    elif [[ $port -eq "Direct Attach Copper" ]]; then
+    elif [[ $medium -eq "DirectAttachCopper" ]]; then
         medium_correction=3.5
-    elif [[ $port -eq "FIBRE" ]]; then
+    elif [[ $medium -eq "FIBRE" ]]; then
         medium_correction=2.
     fi
 
-    nic_power=`bc -l <<< "$speed / 1000 / $gbps_per_watt * $medium_correction"`
+    nic_power=`bc -l <<< "$speed / (1000 * $gbps_per_watt * $medium_correction)"`
     ELEMENTO_POWER_NICS=`bc -l <<< "scale=4; $ELEMENTO_POWER_NICS + $nic_power"`
 
 done <<< "$NICS"
