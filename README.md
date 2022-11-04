@@ -18,7 +18,7 @@ power=(t1_energy - t0_energy)/0.5
 ```
 
 > **Warning**
-> EPM currently supports only single-socket systems
+> EPM currently supports only single-socket systems. Multi socket support should be easily supported by iterating over the socket indexes.
 
 ### Via `lm_sensors`
 It requires installing the `lm_sensors` package [link](https://wiki.archlinux.org/title/lm_sensors).
@@ -95,7 +95,7 @@ In addition the disk activity state is parsed via `hdparm`. The returned state v
 > **Warning**
 > `hdparm` often causes an asleep disk or a standby disk to spin up/go to a higher power state. This has been shown to cause an increase of power consumption during readout. The storage part of EPM should be ran at low rate!
 
-If `unknown` or `active/idle`, further information about disk activity is gotten via `/sys/block/nvmeXX/stat`.
+If `unknown` or `active/idle`, further information about disk activity is gotten via `/sys/block/nvmeXX/stat` reading it twice in a row with minimum delay (0.1s) and comparing the outputs.
 By doing so it is possible to further correct the nominal power consumptions using the following table:
 
 | **Power state**                    | **Coefficient** |
@@ -122,7 +122,7 @@ Data have been obtained from varoius sources. The following table reports the ad
 | 7.2k RPM HDD    | 8W                 |
 
 Devices enumeration is done using `lsscsi`, while the rated RPM/solid stateness is obtained looking into `sg_vpd`.
-Disk activity is then estimated at first by looking into `sysfs` at `/sys/block/sdXX/stat`.
+Disk activity is then estimated at first by looking into `sysfs` at `/sys/block/sdXX/stat` twice in a row with minimum delay (0.1s) and comparing the outputs.
 If no activity is detected via `sysfs`, the specific inactive state is gotten from `smartctl`.
 
 
@@ -188,15 +188,16 @@ In particular, the rating involves three points: 20%, 50% and 100% loads.
 | 80Plus Titanium    | 92%     | 94%     | 90%      |
 
 We used the Kramer method to fit three points to a parabola to obtain a function of the load (defined as current poser draw divided by the maximum PSU power output).
+the values are reported below, where $x$ is the percent load of the PSU and depends on a user supplied maximum power rating:
 
 | **Rating**         | **formual** |
 |:------------------:|:-----------:|
-| 80Plus             | `80`         |
-| 80Plus Bronze      | `-0.0354x^2+2.58x+44.571`         |
-| 80Plus Silver      | `-0.0367x^2+2.67x+46.286`         |
-| 80Plus Gold        | `-0.0376x^2+2.73x+47.429`         |
-| 80Plus Platinum    | `-0.0389x^2+2.79x+49.762`         |
-| 80Plus Titanium    | `-0.0405x^2+2.90x+52.190`         |
+| 80Plus             | $\epsilon=80$         |
+| 80Plus Bronze      | $\epsilon=-0.0354x^2+2.58x+44.571$         |
+| 80Plus Silver      | $\epsilon=-0.0367x^2+2.67x+46.286$         |
+| 80Plus Gold        | $\epsilon=-0.0376x^2+2.73x+47.429$         |
+| 80Plus Platinum    | $\epsilon=-0.0389x^2+2.79x+49.762$         |
+| 80Plus Titanium    | $\epsilon=-0.0405x^2+2.90x+52.190$         |
 
 where `x` in the load.
 
