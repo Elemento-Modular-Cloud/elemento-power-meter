@@ -2,17 +2,20 @@
 
 isActive() {
     device=$(echo "$1" | cut -d "/" -f3)
-    cmd='cat /proc/diskstats | grep "$device"'
-    stats0=$(eval $cmd)
+    stats0=$(</sys/block/$device/stat)
     sleep .1s
-    stats1=$(eval $cmd)
-    echo $(diff  <(echo "$stats0" ) <(echo "$stats1"))
+    stats1=$(</sys/block/$device/stat)
+    case "$stats0" in
+        $stats1 )
+            return 0;;
+        *)
+            return 1;;
+    esac
     return 0
 }
 
 activityModifier() {
-    active=$(isActive $1)
-    if [ "$active" != "" ]; then
+    if [ $(isActive $1) ]; then
         echo 1.
         return 0
     fi
