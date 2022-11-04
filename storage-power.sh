@@ -31,7 +31,6 @@ STORAGE_DEVICES=$(lsscsi -t | grep -i "sata" | awk '{print $NF}')
 
 while IFS= read -r dev; do
     if [[ ! -z "$dev" ]]; then
-        #type=$(hdparm -I $dev | grep -e "Nominal Media Rotation Rate:" | cut -d ":" -f2 | tr -d ' ')
         dev_name=$(echo $dev | cut -d "/" -f3)
         is_rotational=$(cat /sys/block/$dev_name/queue/rotational)
         if [ "$is_rotational" == 1 ]; then
@@ -39,15 +38,11 @@ while IFS= read -r dev; do
         else
             type="SolidStateDevice"
         fi
-        # type=$(smartctl -i $dev | grep -e "Rotation Rate:" | cut -d":" -f2 | tr -d ' ')
-        state=$(smartctl -i --n standby --n sleep -n idle $dev | grep -e "Power mode was:" | cut -d ":" -f2 | tr -d ' ')
+        state=$(bash -c "smartctl -i --n standby --n sleep -n idle /dev/sda 2>&1 1>&1" | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
         # state="unknown"
         modifier=1.
         case $state in
-            "IDLE_B")
-                modifier=$(activityModifier $dev)
-                ;;
-            "ACTIVE or IDLE")
+            "ACTIVE or IDLE"|"IDLE_A"|"IDLE_B")
                 modifier=$(activityModifier $dev)
                 ;;
             "STANDBY")
