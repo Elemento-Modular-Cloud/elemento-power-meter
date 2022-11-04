@@ -35,26 +35,29 @@ while IFS= read -r dev; do
         dev_name=$(echo $dev | cut -d "/" -f3)
         is_rotational=$(cat /sys/block/$dev_name/queue/rotational)
         if [ "$is_rotational" == 1 ]; then
-            type="7200rpm"
+            type=$(sg_vpd --page=bdc $dev | grep -e "Nominal rotation rate:" | cut -d ":" -f2 | tr -d ' ')
         else
             type="SolidStateDevice"
         fi
         # type=$(smartctl -i $dev | grep -e "Rotation Rate:" | cut -d":" -f2 | tr -d ' ')
-        # state=$(hdparm -C $dev | grep -e "drive state is:" | cut -d ":" -f2 | tr -d ' ')
-        state="unknown"
+        state=$(smartctl -i --n standby --n sleep -n idle $dev | grep -e "Power mode was:" | cut -d ":" -f2 | tr -d ' ')
+        # state="unknown"
         modifier=1.
         case $state in
-            "unknown")
+            "IDLE_B")
                 modifier=$(activityModifier $dev)
                 ;;
-            "active/idle")
+            "ACTIVE or IDLE")
                 modifier=$(activityModifier $dev)
                 ;;
-            "standby")
+            "STANDBY")
                 modifier=.2
                 ;;
-            "sleeping")
+            "SLEEP")
                 modifier=.1
+                ;;
+            *)
+                modifier=1.
                 ;;
         esac
         devicepower=$(echo "${STORAGE_POWER_DRAW[$type]} * $modifier" | bc)
