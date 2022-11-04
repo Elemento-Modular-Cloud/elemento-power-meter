@@ -2,7 +2,7 @@
 
 isActive() {
     device=$(echo "$1" | cut -d "/" -f3)
-    cmd='cat /proc/diskstats | grep "$device"'
+    cmd='cat /sys/block/$device/stat'
     stats0=$(eval $cmd)
     sleep .1s
     stats1=$(eval $cmd)
@@ -38,10 +38,12 @@ while IFS= read -r dev; do
         else
             type="SolidStateDevice"
         fi
-        if [ "$active" != "" ]; then
+        is_active=$(isActive $dev)
+        if [ "$is_active" != "" ]; then
             state="ACTIVE or IDLE"
         else
-            state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
+            #state=$(smartctl -n standby -n sleep -n idle -i $dev | grep -o "ACTIVE or IDLE\|IDLE_A\|IDLE_B\|SLEEP")
+            state="STANDBY"
         fi
         modifier=1.
         case $state in
