@@ -20,7 +20,7 @@ activityModifier() {
     return 0
 }
 
-declare -a STORAGE_POWER_DRAW
+declare -A STORAGE_POWER_DRAW
 STORAGE_POWER_DRAW["SolidStateDevice"]=4.2
 STORAGE_POWER_DRAW["15000rpm"]=6.5
 STORAGE_POWER_DRAW["10000rpm"]=5.8
@@ -32,7 +32,13 @@ STORAGE_DEVICES=$(lsscsi -t | grep -i "sata" | awk '{print $NF}')
 while IFS= read -r dev; do
     if [[ ! -z "$dev" ]]; then
         #type=$(hdparm -I $dev | grep -e "Nominal Media Rotation Rate:" | cut -d":" -f2 | tr -d ' ')
-        type=$(smartctl -i $dev | grep -e "Rotation Rate:" | cut -d":" -f2 | tr -d ' ')
+        is_rotational=$(cat /sys/block/$dev/queue/rotational)
+        if is_rotational; then
+            type="7200rpm"
+        else
+            type="SolidStateDevice"
+        fi
+        # type=$(smartctl -i $dev | grep -e "Rotation Rate:" | cut -d":" -f2 | tr -d ' ')
         # state=$(hdparm -C $dev | grep -e "drive state is:" | cut -d ":" -f2 | tr -d ' ')
         state="unknown"
         modifier=1.
