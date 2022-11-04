@@ -5,17 +5,15 @@ isActive() {
     stats0=$(</sys/block/$device/stat)
     sleep .1s
     stats1=$(</sys/block/$device/stat)
-    case "$stats0" in
-        $stats1 )
-            return 0;;
-        *)
-            return 1;;
-    esac
-    return 0
+    if [[ "$stats0" == "$stats1" ]]; then
+        echo "inactive"
+    else
+        echo "active"
+    fi
 }
 
 activityModifier() {
-    if [ $(isActive $1) ]; then
+    if [[ $(isActive $1) == "active" ]]; then
         echo 1.
         return 0
     fi
