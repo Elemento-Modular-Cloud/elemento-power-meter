@@ -1,5 +1,6 @@
 #!/bin/bash
 
+LC_NUMERIC="en_US.UTF-8"
 export ELEMENTO_POWER_TOTAL
 
 PSU_MAX_LOAD=${1:-"850"}
